@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Question</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Message For You</title>
     <style>
         body {
             display: flex;
@@ -13,78 +13,140 @@
             height: 100vh;
             margin: 0;
             background-color: #ffe6e6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Prevents scrolling when button moves */
+            touch-action: manipulation;
+        }
+
+        #content-card {
+            text-align: center;
+            padding: 20px;
+            width: 90%;
         }
 
         h1 {
             color: #d63384;
-            font-size: 3rem;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-size: 2rem;
+            min-height: 100px;
+            margin-bottom: 40px;
         }
 
-        .container {
+        .btn-container {
             position: relative;
-            text-align: center;
+            height: 200px; /* Space for the "No" button to move */
+            width: 100%;
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 1.2rem;
+            padding: 15px 35px;
+            font-size: 1.1rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute;
         }
 
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
-            margin-right: 20px;
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
-            background-color: #ff758f;
+            left: 50%;
+            transform: translateX(-120%); /* Positioned to the left of center */
+            z-index: 10;
         }
 
         #noBtn {
             background-color: #6c757d;
             color: white;
-            position: absolute;
+            left: 50%;
+            transform: translateX(20%); /* Positioned to the right of center */
+            transition: 0.1s;
+        }
+
+        video {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Will you marry me? 💍</h1>
+    <div id="content-card">
+        <h1 id="questionText">Are you the most beautiful woman in the whole world? ✨</h1>
         
-        <button id="yesBtn" onclick="celebrate()">Yes</button>
-        <button id="noBtn" onmouseover="moveButton()">No</button>
+        <div class="btn-container">
+            <button id="yesBtn" onclick="nextQuestion()">Yes</button>
+            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
     </div>
 
     <script>
+        let currentStep = 0;
+        const questions = [
+            "Are you the most beautiful woman in the whole world? ✨",
+            "Are you the kindest soul I've ever met? ❤️",
+            "Do you have the most infectious smile in existence? 😊",
+            "Are you the smartest person I know? 🧠",
+            "Is your heart made of pure gold? 🌟",
+            "Will you marry me? 💍"
+        ];
+
+        const questionText = document.getElementById('questionText');
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+
         function moveButton() {
-            const noBtn = document.getElementById('noBtn');
+            // Get screen dimensions minus button size to keep it in view
+            const padding = 20;
+            const maxWidth = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxHeight = window.innerHeight - noBtn.offsetHeight - padding;
             
-            // Calculate random positions within the visible window
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            // Generate random positions
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxWidth));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxHeight));
             
-            // Apply new position
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            // Move button to absolute position on screen
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            noBtn.style.transform = 'none'; // Remove initial centering transform
         }
 
-        function celebrate() {
-            // Replace the URL below with your actual photo URL
-            window.location.href = "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=1000";
+        function nextQuestion() {
+            currentStep++;
+            if (currentStep < questions.length) {
+                questionText.innerText = questions[currentStep];
+                resetNoButton();
+            } else {
+                showFinalVideo();
+            }
+        }
+
+        function resetNoButton() {
+            // Put the No button back near the Yes button for the next question
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = '50%';
+            noBtn.style.top = '0';
+            noBtn.style.transform = 'translateX(20%)';
+        }
+
+        function showFinalVideo() {
+            // Replace this with your actual video link (Google Drive/YouTube direct link)
+            const videoUrl = "YOUR_VIDEO_URL_HERE"; 
+            
+            document.body.innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <h1 style="color: #d63384;">I knew you'd say YES! ❤️</h1>
+                    <video controls autoplay>
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p style="margin-top: 20px; color: #ff4d6d; font-weight: bold;">Forever starts now.</p>
+                </div>
+            `;
         }
     </script>
-
 </body>
 </html>
