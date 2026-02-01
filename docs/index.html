@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A Message For You</title>
+    <title>Happy Anniversary, My Love</title>
     <style>
         body {
             display: flex;
@@ -12,9 +13,9 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffe6e6;
+            background-color: #fff0f3;
             font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* Prevents scrolling when button moves */
+            overflow: hidden; 
             touch-action: manipulation;
         }
 
@@ -25,125 +26,108 @@
         }
 
         h1 {
-            color: #d63384;
-            font-size: 2rem;
-            min-height: 100px;
+            color: #c9184a;
+            font-size: 1.8rem;
             margin-bottom: 40px;
+            min-height: 80px;
         }
 
         .btn-container {
-            position: relative;
-            height: 200px; /* Space for the "No" button to move */
+            display: flex;
+            justify-content: center;
+            gap: 20px;
             width: 100%;
         }
 
         button {
-            padding: 15px 35px;
+            padding: 15px 30px;
             font-size: 1.1rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            position: absolute;
         }
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-            left: 50%;
-            transform: translateX(-120%); /* Positioned to the left of center */
-            z-index: 10;
-        }
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #noBtn { background-color: #6c757d; color: white; transition: all 0.1s ease; position: relative; }
 
-        #noBtn {
-            background-color: #6c757d;
-            color: white;
-            left: 50%;
-            transform: translateX(20%); /* Positioned to the right of center */
-            transition: 0.1s;
-        }
-
-        video {
-            max-width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .final-video {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.3);
         }
     </style>
 </head>
 <body>
 
     <div id="content-card">
-        <h1 id="questionText">Are you the most beautiful woman in the whole world? ✨</h1>
+        <h1 id="questionText">Has this been the most incredible first year of marriage ever? ✨</h1>
         
         <div class="btn-container">
             <button id="yesBtn" onclick="nextQuestion()">Yes</button>
-            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton()">No</button>
+            <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
         </div>
     </div>
 
     <script>
         let currentStep = 0;
         const questions = [
-            "Are you the most beautiful woman in the whole world? ✨",
-            "Are you the kindest soul I've ever met? ❤️",
-            "Do you have the most infectious smile in existence? 😊",
-            "Are you the smartest person I know? 🧠",
-            "Is your heart made of pure gold? 🌟",
-            "Will you marry me? 💍"
+            "Has this been the most incredible first year of marriage ever? ✨",
+            "Do you love me even more today than you did 365 days ago? ❤️",
+            "Are you ready for 50+ more years of these adventures? 🥂",
+            "Was marrying me the best decision you ever made? 😉",
+            "Am I still the luckiest man to have you as my wife? 🌟",
+            "Will you marry me all over again? 💍"
         ];
 
         const questionText = document.getElementById('questionText');
         const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
 
         function moveButton() {
-            // Get screen dimensions minus button size to keep it in view
-            const padding = 20;
-            const maxWidth = window.innerWidth - noBtn.offsetWidth - padding;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight - padding;
+            const padding = 60;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
             
-            // Generate random positions
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxWidth));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxHeight));
+            const randomX = Math.floor(Math.random() * maxX) + 30;
+            const randomY = Math.floor(Math.random() * maxY) + 30;
             
-            // Move button to absolute position on screen
             noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
-            noBtn.style.transform = 'none'; // Remove initial centering transform
         }
 
         function nextQuestion() {
             currentStep++;
             if (currentStep < questions.length) {
                 questionText.innerText = questions[currentStep];
-                resetNoButton();
+                // Reset "No" button position for the big final question
+                if(currentStep === questions.length - 1) {
+                    resetNoButton();
+                }
             } else {
                 showFinalVideo();
             }
         }
 
         function resetNoButton() {
-            // Put the No button back near the Yes button for the next question
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = '50%';
+            noBtn.style.position = 'relative';
+            noBtn.style.left = '0';
             noBtn.style.top = '0';
-            noBtn.style.transform = 'translateX(20%)';
         }
 
         function showFinalVideo() {
-            // Replace this with your actual video link (Google Drive/YouTube direct link)
-            const videoUrl = "YOUR_VIDEO_URL_HERE"; 
+            // Replace with your direct link
+            const videoUrl = "https://drive.google.com/file/d/1AXBTH86LcthWNH1jdtw34u9B0lyP2swo/view?usp=drivesdk"; 
             
             document.body.innerHTML = `
                 <div style="text-align:center; padding: 20px;">
-                    <h1 style="color: #d63384;">I knew you'd say YES! ❤️</h1>
-                    <video controls autoplay>
+                    <h1 style="color: #c9184a;">Happy 1st Anniversary! ❤️</h1>
+                    <video class="final-video" controls autoplay>
                         <source src="${videoUrl}" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <p style="margin-top: 20px; color: #ff4d6d; font-weight: bold;">Forever starts now.</p>
+                    <p style="margin-top: 20px; color: #ff4d6d; font-size: 1.3rem; font-weight: bold;">Here's to forever. ✨</p>
                 </div>
             `;
         }
